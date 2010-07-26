@@ -1,3 +1,8 @@
+" Bundle all plugins
+set runtimepath+=$HOME/.vim/bundle/vim-pathogen
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
+
 "Use Vim settings, rather then Vi settings (much better!).
 "This must be first, because it changes other options as a side effect.
 set nocompatible
@@ -59,6 +64,156 @@ set statusline+=%c,     "cursor column
 set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
 set laststatus=2
+
+" Tabs and spaces indent
+set nu
+set sw=2
+set sts=2
+set expandtab
+set autoindent
+
+set mousetime=750
+
+colorscheme wombat
+
+"folding settings
+set foldmethod=indent   "fold based on indent
+set foldnestmax=3       "deepest fold is 3 levels
+set nofoldenable        "dont fold by default
+
+set wildmode=list:longest   "make cmdline tab completion similar to bash
+set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
+set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
+
+"display tabs and trailing spaces
+set list
+set listchars=tab:▷⋅,trail:⋅,nbsp:⋅
+
+set formatoptions-=o "dont continue comments when pushing o/O
+
+"vertical/horizontal scroll off settings
+set scrolloff=3
+set sidescrolloff=7
+set sidescroll=1
+
+"load ftplugins and indent files
+filetype plugin on
+filetype indent on
+
+"turn on syntax highlighting
+syntax on
+
+"some stuff to get the mouse going in term
+set mouse=a
+set ttymouse=xterm2
+
+"tell the term has 256 colors
+set t_Co=256
+
+"hide buffers when not displayed
+set hidden
+
+"dont load csapprox if we no gui support - silences an annoying warning
+if !has("gui")
+    let g:CSApprox_loaded = 1
+endif
+
+
+
+"make <c-l> clear the highlight as well as redraw
+nnoremap <C-L> :nohls<CR><C-L>
+inoremap <C-L> <C-O>:nohls<CR>
+
+"map to bufexplorer
+nnoremap <C-B> :BufExplorer<cr>
+
+"map Q to something useful
+noremap Q gq
+
+"make Y consistent with C and D
+nnoremap Y y$
+
+" Display files navigator "\ + p"
+nmap <silent> <Leader>p :NERDTreeToggle<CR>
+
+" Ctrl-S is save
+map <C-S> :w<CR>
+imap <C-S> <C-O>:w<CR>
+cmap <C-S> <C-C>:w<CR>
+
+" U in Visual mode Upper-Case
+vmap <C-U> gU
+
+" L in Visual mode Lower-Case
+vmap <C-L> gu
+
+" Alt-a open all buffers in their own tabs
+map <M-a> :tab ball<CR>
+imap <M-a> <C-O>:tab ball<CR>
+cmap <M-a> <C-C>:tab ball<CR>
+
+" Ctrl-Tab goes to next window tab
+map <C-RIGHT> :tabnext<CR>
+imap <C-RIGHT> <C-O>:tabnext<CR>
+cmap <C-RIGHT> <C-C>:tabnext<CR>
+
+autocmd VimLeavePre * nested execute "NERDTreeClose"
+" Save session before exit
+autocmd VimLeave * nested execute "mksession! " . $HOME . "/.vim_session"
+" autocmd VimEnter * nested if argc() == 0 | execute "source " . $HOME . "/.vim_session"
+
+" Load laest session
+map <F3> :source ~/.vim_session <cr>
+
+" Sudo saving
+cmap w!! %!sudo tee > /dev/null %
+
+"mark syntax errors with :signs
+let g:syntastic_enable_signs=1
+
+" Rsense
+let g:rsenseHome = "$RSENSE_HOME"
+let g:rsenseUseOmniFunc = 1
+
+"Insert copy pasted text without auto indent
+nnoremap <F2> :set invpaste paste?<CR>
+imap <F2> <C-O>:set invpaste paste?<CR>
+set pastetoggle=<F2>
+
+"visual search mappings
+function! s:VSetSearch()
+    let temp = @@
+    norm! gvy
+    let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
+    let @@ = temp
+endfunction
+vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
+vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
+
+
+"jump to last cursor position when opening a file
+"dont do it when writing a commit log entry
+autocmd BufReadPost * call SetCursorPosition()
+function! SetCursorPosition()
+    if &filetype !~ 'commit\c'
+        if line("'\"") > 0 && line("'\"") <= line("$")
+            exe "normal! g`\""
+            normal! zz
+        endif
+    end
+endfunction
+
+"define :HighlightLongLines command to highlight the offending parts of
+"lines that are longer than the specified length (defaulting to 80)
+command! -nargs=? HighlightLongLines call s:HighlightLongLines('<args>')
+function! s:HighlightLongLines(width)
+    let targetWidth = a:width != '' ? a:width : 79
+    if targetWidth > 0
+        exec 'match Todo /\%>' . (targetWidth) . 'v/'
+    else
+        echomsg "Usage: HighlightLongLines [natural number]"
+    endif
+endfunction
 
 "recalculate the trailing whitespace warning when idle, and after saving
 autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
@@ -167,118 +322,65 @@ function! s:Median(nums)
     endif
 endfunction
 
-"indent settings
-set shiftwidth=4
-set softtabstop=4
-set expandtab
-set autoindent
-
-"folding settings
-set foldmethod=indent   "fold based on indent
-set foldnestmax=3       "deepest fold is 3 levels
-set nofoldenable        "dont fold by default
-
-set wildmode=list:longest   "make cmdline tab completion similar to bash
-set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
-set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
-
-"display tabs and trailing spaces
-set list
-set listchars=tab:▷⋅,trail:⋅,nbsp:⋅
-
-set formatoptions-=o "dont continue comments when pushing o/O
-
-"vertical/horizontal scroll off settings
-set scrolloff=3
-set sidescrolloff=7
-set sidescroll=1
-
-"load ftplugins and indent files
-filetype plugin on
-filetype indent on
-
-"turn on syntax highlighting
-syntax on
-
-"some stuff to get the mouse going in term
-set mouse=a
-set ttymouse=xterm2
-
-"tell the term has 256 colors
-set t_Co=256
-
-"hide buffers when not displayed
-set hidden
-
-"dont load csapprox if we no gui support - silences an annoying warning
-if !has("gui")
-    let g:CSApprox_loaded = 1
-endif
-
-"make <c-l> clear the highlight as well as redraw
-nnoremap <C-L> :nohls<CR><C-L>
-inoremap <C-L> <C-O>:nohls<CR>
-
-"map to bufexplorer
-nnoremap <C-B> :BufExplorer<cr>
-
-"map to fuzzy finder text mate stylez
-nnoremap <c-f> :FuzzyFinderTextMate<CR>
-
-"map Q to something useful
-noremap Q gq
-
-"make Y consistent with C and D
-nnoremap Y y$
-
-"mark syntax errors with :signs
-let g:syntastic_enable_signs=1
-
-"snipmate setup
-"autocmd vimenter * call s:SetupSnippets()
-"function! s:SetupSnippets()
-
-    ""if we're in a rails env then read in the rails snippets
-    ""if filereadable("./config/environment.rb")
-        ""call ExtractSnips("~/.vim/snippets/ruby-rails", "ruby")
-        ""call ExtractSnips("~/.vim/snippets/eruby-rails", "eruby")
-    ""endif
-
-    "call s:DefineSnips("~/.vim/snippetsippets", "eruby")
-    "call ExtractSnips("~/.vim/snippets/html.snippets", "xhtml")
-"endfunction
-
-"visual search mappings
-function! s:VSetSearch()
-    let temp = @@
-    norm! gvy
-    let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-    let @@ = temp
+" === BEGIN Moving lines "Ctrl + Arrows(ex. Up, Down)"
+function! MoveLineUp()
+  call MoveLineOrVisualUp(".", "")
 endfunction
-vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
-vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
-
-
-"jump to last cursor position when opening a file
-"dont do it when writing a commit log entry
-autocmd BufReadPost * call SetCursorPosition()
-function! SetCursorPosition()
-    if &filetype !~ 'commit\c'
-        if line("'\"") > 0 && line("'\"") <= line("$")
-            exe "normal! g`\""
-            normal! zz
-        endif
-    end
+function! MoveLineDown()
+  call MoveLineOrVisualDown(".", "")
 endfunction
-
-"define :HighlightLongLines command to highlight the offending parts of
-"lines that are longer than the specified length (defaulting to 80)
-command! -nargs=? HighlightLongLines call s:HighlightLongLines('<args>')
-function! s:HighlightLongLines(width)
-    let targetWidth = a:width != '' ? a:width : 79
-    if targetWidth > 0
-        exec 'match Todo /\%>' . (targetWidth) . 'v/'
-    else
-        echomsg "Usage: HighlightLongLines [natural number]"
-    endif
+function! MoveVisualUp()
+  call MoveLineOrVisualUp("'<", "'<,'>")
+  normal gv
 endfunction
+function! MoveVisualDown()
+  call MoveLineOrVisualDown("'>", "'<,'>")
+  normal gv
+endfunction
+function! MoveLineOrVisualUp(line_getter, range)
+  let l_num = line(a:line_getter)
+  if l_num - v:count1 - 1 < 0
+    let move_arg = "0"
+  else
+    let move_arg = a:line_getter." -".(v:count1 + 1)
+  endif
+  call MoveLineOrVisualUpOrDown(a:range."move ".move_arg)
+endfunction
+function! MoveLineOrVisualDown(line_getter, range)
+  let l_num = line(a:line_getter)
+  if l_num + v:count1 > line("$")
+    let move_arg = "$"
+  else
+    let move_arg = a:line_getter." +".v:count1
+  endif
+  call MoveLineOrVisualUpOrDown(a:range."move ".move_arg)
+endfunction
+function! MoveLineOrVisualUpOrDown(move_arg)
+  let col_num = virtcol(".")
+  execute "silent! ".a:move_arg
+  execute "normal! ".col_num."|"
+endfunction
+nnoremap <silent> <C-Up> :<C-u>call MoveLineUp()<CR>
+nnoremap <silent> <C-Down> :<C-u>call MoveLineDown()<CR>
+inoremap <silent> <C-Up> <C-o>:<C-u>call MoveLineUp()<CR>
+inoremap <silent> <C-Down> <C-o>:<C-u>call MoveLineDown()<CR>
+vnoremap <silent> <C-Up> :<C-u>call MoveVisualUp()<CR>
+vnoremap <silent> <C-Down> :<C-u>call MoveVisualDown()<CR>
+" === END Moving Lines
+
+au FileType * if &ft == 'eruby' | call SetupSnips(snippets_dir, 'html', 'eruby') | endif
+" Setup ruby snips
+fun! SetupSnips(dir, aliasft, realft)
+  for path in split(globpath(a:dir, a:aliasft.'/')."\n".
+      \ globpath(a:dir, a:aliasft.'-*/'), "\n")
+    if has_key(g:did_ft, a:aliasft.'.'.a:realft) | continue | endif
+    call ExtractSnips(path, a:realft)
+  endfor
+  for path in split(globpath(a:dir, a:aliasft.'.snippets')."\n".
+      \ globpath(a:dir, a:aliasft.'-*.snippets'), "\n")
+    if has_key(g:did_ft, a:aliasft.'.'.a:realft) | continue | endif
+    call ExtractSnipsFile(path, a:realft)
+  endfor
+  let g:did_ft[a:aliasft.'.'.a:realft] = 1
+endf
+
