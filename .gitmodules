@@ -43,3 +43,6 @@
 [submodule "bundle/vim-autocomplpop"]
 	path = bundle/vim-autocomplpop
 	url = git://github.com/clones/vim-autocomplpop.git
+[submodule "bundle/vim-apidock"]
+	path = bundle/vim-apidock
+	url = git://github.com/mileszs/apidock.vim.git
