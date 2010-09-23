@@ -46,6 +46,6 @@
 [submodule "bundle/vim-apidock"]
 	path = bundle/vim-apidock
 	url = git://github.com/mileszs/apidock.vim.git
-[submodule "bundle/vim-goole-translate"]
-	path = bundle/vim-goole-translate
+[submodule "bundle/vim-google-translate"]
+	path = bundle/vim-google-translate
 	url = git://github.com/skyeagle/vim-google-translate.git
