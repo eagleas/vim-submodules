@@ -193,7 +193,11 @@ vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 let g:browser = 'xdg-open '
 
+" remember folds
+"au BufWinLeave * mkview
+"au BufWinEnter * silent loadview
 
+set tags=tags;/home/anton/.rvm/gems/ruby-1.9.2-p0;/
 
 "jump to last cursor position when opening a file
 "dont do it when writing a commit log entry
@@ -388,77 +392,21 @@ fun! SetupSnips(dir, aliasft, realft)
   let g:did_ft[a:aliasft.'.'.a:realft] = 1
 endf
 
-map ё `
-map й q
-map ц w
-map у e
-map к r
-map е t
-map н y
-map г u
-map ш i
-map щ o
-map з p
-map х [
-map ъ ]
 
-map ф a
-map ы s
-map в d
-map а f
-map п g
-map р h
-map о j
-map л k
-map д l
-map ж ;
-map э '
+"Russian keymaps setup http://ru.wikibooks.org/wiki/Vim
+"set keymap=russian-jcukenwin
+"set iminsert=0
+"imap <F12> {ctrl-k}{ctrl-6}{ctrl-6}
+set langmap=ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕHГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ;`qwertyuiop[]asdfghjkl;'zxcvbnm,.~QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>
 
-map я z
-map ч x
-map с c
-map м v
-map и b
-map т n
-map ь m
-map б ,
-map ю .
+"Russian translation
+let g:from_language='en'
+let g:to_language='ru'
+nnoremap <Space> :Trans<CR>
+nnoremap <Leader><Space> :TransReverse<CR>
+vnoremap <Space> <ESC>:TransV<CR>
+vnoremap <Leader><Space> <ESC>:TransVReverse<CR>
 
-map Ё ~
-map Й Q
-map Ц W
-map У E
-map К R
-map Е T
-map Н Y
-map Г U
-map Ш I
-map Щ O
-map З P
-map Х {
-map Ъ }
-
-map Ф A
-map Ы S
-map В D
-map А F
-map П G
-map Р H
-map О J
-map Л K
-map Д L
-map Ж :
-map Э "
-
-map Я Z
-map Ч X
-map С C
-map М V
-map И B
-map Т N
-map Ь M
-map Б <
-map Ю >
 
 command! -nargs=0 -range SortWords call SortWords()
 " Add a mapping, go to your string, then press vi",s
