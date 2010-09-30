@@ -49,3 +49,6 @@
 [submodule "bundle/vim-google-translate"]
 	path = bundle/vim-google-translate
 	url = git://github.com/skyeagle/vim-google-translate.git
+[submodule "bundle/vim-taglist"]
+	path = bundle/vim-taglist
+	url = git://github.com/vim-scripts/taglist.vim.git

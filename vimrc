@@ -197,7 +197,28 @@ let g:browser = 'xdg-open '
 "au BufWinLeave * mkview
 "au BufWinEnter * silent loadview
 
-set tags=tags;/home/anton/.rvm/gems/ruby-1.9.2-p0;/
+" Tags setup
+set tags=tags;/
+" Invoke :Rtags will refresh tags with this arguments
+let g:rails_ctags_arguments = "~/.rvm/gems/ruby-1.9.2-p0"
+
+set winminheight=0      " Allow windows to get fully squashed
+"
+" Switch between windows, maximizing the current window
+"
+map <C-J> <C-W>j<C-W>_
+map <C-K> <C-W>k<C-W>_
+
+
+" Tag list plugin setup
+nnoremap <silent> <F8> :TlistToggle<CR>
+let Tlist_Exit_OnlyWindow = 1     " exit if taglist is last window open
+let Tlist_Show_One_File = 1       " Only show tags for current buffer
+let Tlist_Enable_Fold_Column = 0  " no fold column (only showing one file)
+let tlist_sql_settings = 'sql;P:package;t:table'
+let tlist_ant_settings = 'ant;p:Project;r:Property;t:Target'
+let Tlist_Use_Right_Window = 1
+
 
 "jump to last cursor position when opening a file
 "dont do it when writing a commit log entry
