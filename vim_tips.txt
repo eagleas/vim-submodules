@@ -1,0 +1,55 @@
+:e!                   - Reopen the current file, getting rid of any unsaved changes. Great for when a global search and replace goes awry.
+*, #		      - Search for all occurrences of word under the cursor.
+:%s/search/replace/g  - Global Search and replace
+:%s/search/replace/gc - The 'c' makes it prompt you at each replace instance
+:%s//replace/g        - will replace the last term that was searched for, instead of you having to type it again. This works well with using * to search for the word under the cursor.
+
+gg=G     - авто отступы во всем файле
+=%       - Indents the block between two braces/#ifdefs 
+%        - Brace/parentheses match. If you have the cursor on a parenthesis/brace/etc ((){}[]), and hit % it will jump to the corresponding one.
+
+ci"    -> Delete everything inside "" string and start insert mode
+cit    -> Replace inside tag
+da[    -> Delete the [] region around your cursor
+vi'    -> Visual select everything inside '' string
+ya(    -> Yank all text from ( to )
+
+Insert mode:
+
+C-R " - Paste deleted or yanked text
+
+
+Navigation:
+
+^X^E ^X^Y	scroll up, down
+
+CTRL-w n	Creates a new window above the current window
+CTRL-w j	Moves the cursor to the window below the current one
+CTRL-w k	Moves the cursor to the window above the current one
+CTRL-w s	Splits the current window - creates a new window editing the same file as the current window
+CTRL-w o	Make the current window the only window. Closes all other windows.
+
+zz - move current line to the middle of the screen
+zt - move current line to the top of the screen
+zb - move current line to the bottom of the screen
+
+Indention:
+
+>> will indent that line,
+4>> will indent all four lines,
+>3j will do the same thing in a different way (indent from this line to three lines down),
+>} will indent all of the lines until the end of the paragraph (i.e. to the first empty line, see :help object-motions), and
+>ap will indent all of the lines for a p-aragraph (see :help text-objects), even if your cursor isn't on the first line.
+
+
+Tags jump:
+:tj [tagname]
+g CTRL-] with the cursor positioned on the tag.
+CTRL-w g CTRL-] jumps to the tag in a new window.
+
+
+Visual mode:
+CTRL-v jjjjj[...] I	 If you select a rectangular block and then type I, you can then insert text in front of the block on each line.
+CTRL-v jjjjj[....] A	 If you select a rectangular block and then type A, you can then append text at the end of the block on each line.
+CTRL-v $ jjjjj[....] A	 If you put a $ at the beginning vim will "remember" you've selected to the end of the line. This will allow you to append text at the end of each line even if the lines are of varying length.
+
