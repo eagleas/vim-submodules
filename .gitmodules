@@ -55,3 +55,6 @@
 [submodule "bundle/vim-ack"]
 	path = bundle/vim-ack
 	url = git://github.com/mileszs/ack.vim.git
+[submodule "bundle/vim-align"]
+	path = bundle/vim-align
+	url = git://github.com/tsaleh/vim-align.git

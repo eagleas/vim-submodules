@@ -175,6 +175,9 @@ let g:syntastic_enable_signs=1
 let g:rsenseHome = "$RSENSE_HOME"
 let g:rsenseUseOmniFunc = 1
 
+"Ack grep
+let g:ackprg="ack-grep -H --nocolor --nogroup --column"
+
 "Insert copy pasted text without auto indent
 nnoremap <F2> :set invpaste paste?<CR>
 imap <F2> <C-O>:set invpaste paste?<CR>
@@ -200,7 +203,7 @@ let g:browser = 'xdg-open '
 " Tags setup
 set tags=tags;/
 " Invoke :Rtags will refresh tags with this arguments
-let g:rails_ctags_arguments = "~/.rvm/gems/ruby-1.9.2-p0"
+let g:rails_ctags_arguments = "~/.rvm/gems/ruby-1.9.2-p0 ~/work"
 
 set winminheight=0      " Allow windows to get fully squashed
 "
